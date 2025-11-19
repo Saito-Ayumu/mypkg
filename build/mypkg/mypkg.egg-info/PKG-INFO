@@ -1,0 +1,8 @@
+Metadata-Version: 2.1
+Name: mypkg
+Version: 0.0.1
+Summary: ROS 2 sample: talker/listener for /countup (Int16).
+Maintainer: Ayumu Saito
+Maintainer-email: saito.ayumu1002@icloud.com
+License: GPL-3.0-only
+Provides-Extra: test
