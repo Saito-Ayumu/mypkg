@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# SPDX-License-Identifier: GPL-3.0-only
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Int16
@@ -9,12 +8,14 @@ class Talker(Node):
         super().__init__('talker')
         self.pub = self.create_publisher(Int16, 'countup', 10)
         self.i = 0
-        self.create_timer(0.5, self.on_timer)
+        self.create_timer(0.5, self.on_timer)  # ← このコールバック名と一致させる
 
-    def on_timer(self):
-        msg = Int16(); msg.data = self.i
+    def on_timer(self):  # ← 必ずこの関数が存在すること
+        msg = Int16()
+        msg.data = self.i
         self.pub.publish(msg)
-        self.get_logger().info(f'Publish: {msg.data}')
+        # 資料通り“無言”にするならログは出さない
+        # self.get_logger().info(f'Publish: {msg.data}')
         self.i += 1
 
 def main():
