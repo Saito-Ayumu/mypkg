@@ -1,30 +1,20 @@
-#!/usr/bin/env python3
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Int16
+from person_msgs.srv import Query
 
-class Talker(Node):
-    def __init__(self):
-        super().__init__('talker')
-        self.pub = self.create_publisher(Int16, 'countup', 10)
-        self.i = 0
-        self.create_timer(0.5, self.on_timer)  # ← このコールバック名と一致させる
+rclpy.init()
+node = Node("talker")
+ 
+ 
+def cb(request, response):
+    if request.name == "齊藤歩":  
+        response.age = 20
+    else:
+        response.age = 255
+    
+    return response
 
-    def on_timer(self):  # ← 必ずこの関数が存在すること
-        msg = Int16()
-        msg.data = self.i
-        self.pub.publish(msg)
-        # 資料通り“無言”にするならログは出さない
-        # self.get_logger().info(f'Publish: {msg.data}')
-        self.i += 1
-
+    
 def main():
-    rclpy.init()
-    node = Talker()
+    srv = node.create_service(Query, "query", cb)
     rclpy.spin(node)
-    node.destroy_node()
-    rclpy.shutdown()
-
-if __name__ == '__main__':
-    main()
-

@@ -1,24 +1,31 @@
-#!/usr/bin/env python3
-# SPDX-License-Identifier: GPL-3.0-only
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Int16
+from person_msgs.srv import Query
 
-class Listener(Node):
-    def __init__(self):
-        super().__init__('listener')
-        self.create_subscription(Int16, 'countup', self.cb, 10)
+rclpy.init()
+node = Node("listener")
 
-    def cb(self, msg):
-        self.get_logger().info(f'Listen: {msg.data}')
 
 def main():
-    rclpy.init()
-    node = Listener()
-    rclpy.spin(node)
-    node.destroy_node()
-    rclpy.shutdown()
+    client = node.create_client(Query, 'query')
+    while not client.wait_for_service(timeout_sec=1.0):
+        node.get_logger().info('待機中')
 
-if __name__ == '__main__':
-    main()
+    req = Query.Request()
+    req.name = "齊藤歩"
+    future = client.call_async(req)
 
+    while rclpy.ok():
+        rclpy.spin_once(node)
+        if future.done():
+            try:
+                responce = future.result()
+            except:
+                node.get_logger().info("呼び出し失敗")
+            else:
+                node.get_logger().info("age : {}".format(responce.age))
+
+            break
+
+        node.destroy_node()
+        rclpy.shutdown()
