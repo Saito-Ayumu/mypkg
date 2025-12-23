@@ -4,21 +4,31 @@
 
 import rclpy
 from rclpy.node import Node
-from person_msgs.srv import Query
+from std_msgs.msg import Int16
 
-rclpy.init()
-node = Node("talker")
- 
- 
-def cb(request, response):
-    if request.name == "齊藤歩":  
-        response.age = 20
-    else:
-        response.age = 255
-    
-    return response
 
-    
+class Talker(Node):
+    def __init__(self):
+        super().__init__('talker')
+        self.pub = self.create_publisher(Int16, 'countup', 10)
+        self.count = 0
+        self.timer = self.create_timer(0.5, self.on_timer)  # 2Hz
+
+    def on_timer(self):
+        self.count += 1
+        msg = Int16()
+        msg.data = self.count
+        self.pub.publish(msg)
+        self.get_logger().info(f'Talk: {msg.data}')
+
+
 def main():
-    srv = node.create_service(Query, "query", cb)
-    rclpy.spin(node)
+    rclpy.init()
+    node = Talker()
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
+    node.destroy_node()
+    rclpy.shutdown()
+

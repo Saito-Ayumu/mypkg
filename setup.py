@@ -1,29 +1,29 @@
-# !/usr/bin/env python3
+#!/usr/bin/env python3
 # SPDX-FileCopyrightText: 2025 Ayumu Saito
 # SPDX-License-Identifier: BSD-3-Clause
 
 import os
 from glob import glob
-from setuptools import find_packages,  setup
+
+from setuptools import setup
 
 package_name = 'mypkg'
 
 setup(
     name=package_name,
-    version='0.0.0',
+    version='0.0.1',
     packages=[package_name],
     data_files=[
-        ('share/ament_index/resource_index/packages',
-         ['resource/'+ package_name]),
-        ('share/' + package_name, ['package.xml']),
-        (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch/launch.'))
+        ('share/ament_index/resource_index/packages', [f'resource/{package_name}']),
+        (f'share/{package_name}', ['package.xml']),
+        (os.path.join('share', package_name, 'launch'), glob('launch/*.launch.py')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='Ayumu Saito',
-    maintainer_email='saito.ayumu1002@icloud.com',
-    description='ROS 2 sample: /countup talker & listener (std_msgs/Int16).',
-    license='GPL-3.0-only',
+    maintainer_email='saito@example.com',
+    description='Sample ROS 2 package: talker/listener for /countup.',
+    license='BSD-3-Clause',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
@@ -31,4 +31,5 @@ setup(
             'listener = mypkg.listener:main',
         ],
     },
-)icense='GPL-3.0-only',
+)
+
