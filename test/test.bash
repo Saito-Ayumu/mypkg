@@ -8,8 +8,11 @@ dir=~
 cd $dir/ros2_ws
 colcon build
 source $dir/.bashrc
-echo "AMENT_PREFIX_PATH=$AMENT_PREFIX_PATH"
-echo "COLCON_PREFIX_PATH=$COLCON_PREFIX_PATH"
+if [ -d /root/ros2_ws/install/mypkg ]; then
+  export AMENT_PREFIX_PATH="/root/ros2_ws/install/mypkg${AMENT_PREFIX_PATH:+:$AMENT_PREFIX_PATH}"
+else
+  export AMENT_PREFIX_PATH="/root/ros2_ws/install${AMENT_PREFIX_PATH:+:$AMENT_PREFIX_PATH}"
+fi
 timeout 10 ros2 launch mypkg talk_listen.launch.py > /tmp/mypkg.log
 
 cat /tmp/mypkg.log |
