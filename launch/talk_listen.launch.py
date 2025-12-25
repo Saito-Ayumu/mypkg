@@ -2,22 +2,22 @@
 # SPDX-FileCopyrightText: 2025 Ayumu Saito
 # SPDX-License-Identifier: BSD-3-Clause
 
-import launch
-import launch.actions
-import launch.substitutions
-import launch_ros.actions
+from launch import LaunchDescription
+from launch_ros.actions import Node
 
 
 def generate_launch_description():
+    talker = Node(
+        package='mypkg',
+        executable='talker',
+        output='screen',
+    )
 
-    talker = launch_ros.actions.Node(
-            package='mypkg',
-            executable='talker',
-            )
-    listener = launch_ros.actions.Node(
-            package='mypkg',
-            executable='listener',
-            output='screen'
-            )
+    listener = Node(
+        package='mypkg',
+        executable='listener',
+        output='screen',
+    )
 
-    return launch.LaunchDescription([talker, listener])
+    return LaunchDescription([talker, listener])
+

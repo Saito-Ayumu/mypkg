@@ -10,7 +10,7 @@ from std_msgs.msg import Int16
 class Listener(Node):
     def __init__(self):
         super().__init__('listener')
-        self.sub = self.create_subscription(Int16, 'countup', self.cb, 10)
+        self.sub = self.create_subscription(Int16, 'count', self.cb, 10)
 
     def cb(self, msg: Int16):
         self.get_logger().info(f'Listen: {msg.data}')
@@ -21,8 +21,6 @@ def main():
     node = Listener()
     try:
         rclpy.spin(node)
-    except KeyboardInterrupt:
-        pass
-    node.destroy_node()
-    rclpy.shutdown()
-
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
