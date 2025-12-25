@@ -8,6 +8,8 @@ dir=~
 cd $dir/ros2_ws
 colcon build
 source $dir/.bashrc
+echo "AMENT_PREFIX_PATH=$AMENT_PREFIX_PATH"
+echo "COLCON_PREFIX_PATH=$COLCON_PREFIX_PATH"
 timeout 10 ros2 launch mypkg talk_listen.launch.py > /tmp/mypkg.log
 
 cat /tmp/mypkg.log |
